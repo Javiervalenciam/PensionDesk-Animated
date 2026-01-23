@@ -2,27 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Loader } from './components/Loader';
 import { LandingPage } from './views/LandingPage';
 import { Dashboard } from './views/Dashboard';
+import { CaseDetail } from './views/CaseDetail';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [currentView, setCurrentView] = useState<'landing' | 'app'>('landing');
+  const [currentView, setCurrentView] = useState('landing');
+  const [currentId, setCurrentId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    // Simulate initial asset loading
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2500);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleEnterApp = () => {
+  const handleNavigate = (view: string, id?: string) => {
     window.scrollTo(0, 0);
-    setCurrentView('app');
-  };
-
-  const handleGoHome = () => {
-    window.scrollTo(0, 0);
-    setCurrentView('landing');
+    setCurrentView(view);
+    setCurrentId(id);
   };
 
   return (
@@ -31,8 +28,10 @@ export default function App() {
         <Loader onFinish={() => setIsLoading(false)} />
       ) : (
         <>
-          {currentView === 'landing' && <LandingPage onEnterApp={handleEnterApp} />}
-          {currentView === 'app' && <Dashboard onLogout={handleGoHome} />}
+          {currentView === 'landing' && <LandingPage onEnterApp={() => handleNavigate('dashboard')} />}
+          {currentView === 'dashboard' && <Dashboard onLogout={() => handleNavigate('landing')} onNavigate={handleNavigate} />}
+          {currentView === 'create_case' && <CaseDetail onNavigate={handleNavigate} />}
+          {currentView === 'case_detail' && <CaseDetail caseId={currentId} onNavigate={handleNavigate} />}
         </>
       )}
     </div>

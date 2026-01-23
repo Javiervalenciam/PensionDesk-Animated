@@ -1,20 +1,22 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# PensiónDesk Local
 
-# Run and deploy your AI Studio app
+## MVP1 - Sistema de Gestión Pensional
 
-This contains everything you need to run your app locally.
+### Modo Browser (Demo)
+Esta aplicación corre por defecto en modo "Simulación Local" dentro del navegador. Usa `localStorage` para persistir datos. No requiere instalación de backend para probar la UI.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1yMCX3WooXyM7vZx0dZoU6-L2cJaitCwS
+### Modo Full Stack (Producción Local)
+Para ejecutar la arquitectura real con Python y SQLite:
 
-## Run Locally
+1. **Backend:**
+   ```bash
+   cd backend
+   pip install fastapi uvicorn sqlmodel
+   uvicorn main:app --reload
+   ```
 
-**Prerequisites:**  Node.js
+2. **Frontend:**
+   Configurar variable de entorno `VITE_USE_API=true` para conectar con localhost:8000.
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Backup
+Ve a Configuración -> Backup para descargar tu base de datos JSON completa.
