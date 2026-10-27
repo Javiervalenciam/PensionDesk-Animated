@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '../components/Navbar';
-import { Search, Plus, Filter, MoreHorizontal, AlertCircle } from 'lucide-react';
+import { Search, Plus, Filter, MoreHorizontal, AlertCircle, Settings, FileText } from 'lucide-react';
 import { Case, CaseStatus, DeadlineStatus, Priority } from '../types';
-import { db } from '../services/localDb';
+import { api } from '../services/api';
 import { getDaysDiff } from '../utils/dateUtils';
 
 interface DashboardProps {
@@ -16,12 +16,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout, onNavigate }) =>
   const [activeStatus, setActiveStatus] = useState<string>('ALL');
 
   useEffect(() => {
-    const loadCases = () => {
-      const allCases = db.getCases();
-      setCases([...allCases]); // Clone to force refresh
+    const loadCases = async () => {
+      try {
+        const allCases = await api.getCases();
+        setCases(allCases);
+      } catch (error) {
+        console.error('Error loading cases:', error);
+      }
     };
     loadCases();
-    // Simple polling for demo purposes or could add an event listener
     const interval = setInterval(loadCases, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -69,6 +72,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout, onNavigate }) =>
             <p className="text-zinc-500 text-sm">Sistema Local v1.0 &bull; {cases.length} Casos Totales</p>
           </div>
           <div className="flex gap-3">
+            <button 
+              onClick={() => onNavigate('prompts_library')}
+              className="flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm font-semibold"
+            >
+              <FileText size={16} /> Prompts
+            </button>
+            <button 
+              onClick={() => onNavigate('settings')}
+              className="flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm font-semibold"
+            >
+              <Settings size={16} /> Configuración
+            </button>
             <button 
               onClick={() => onNavigate('create_case')}
               className="flex items-center gap-2 px-4 py-2 bg-white text-black rounded-lg hover:bg-zinc-200 transition-colors text-sm font-semibold shadow-[0_0_15px_rgba(255,255,255,0.1)]"

@@ -3,6 +3,8 @@ import { Loader } from './components/Loader';
 import { LandingPage } from './views/LandingPage';
 import { Dashboard } from './views/Dashboard';
 import { CaseDetail } from './views/CaseDetail';
+import { Settings } from './views/Settings';
+import { PromptsLibrary } from './views/PromptsLibrary';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +34,8 @@ export default function App() {
           {currentView === 'dashboard' && <Dashboard onLogout={() => handleNavigate('landing')} onNavigate={handleNavigate} />}
           {currentView === 'create_case' && <CaseDetail onNavigate={handleNavigate} />}
           {currentView === 'case_detail' && <CaseDetail caseId={currentId} onNavigate={handleNavigate} />}
+          {currentView === 'settings' && <Settings onNavigate={handleNavigate} />}
+          {currentView === 'prompts_library' && <PromptsLibrary onNavigate={handleNavigate} />}
         </>
       )}
     </div>

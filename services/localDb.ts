@@ -97,14 +97,55 @@ class LocalDatabase {
 
   // PROMPTS
   getPrompts() { return this.data.prompts; }
+  getPrompt(id: string) { return this.data.prompts.find(p => p.id === id); }
   addPrompt(p: Prompt) { this.data.prompts.push(p); this.save(); }
+  updatePrompt(id: string, updates: Partial<Prompt>) {
+    const idx = this.data.prompts.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      this.data.prompts[idx] = { ...this.data.prompts[idx], ...updates };
+      this.save();
+    }
+  }
+  deletePrompt(id: string) {
+    this.data.prompts = this.data.prompts.filter(p => p.id !== id);
+    this.save();
+  }
   
   // RULES
   getRules() { return this.data.rules; }
+  getRule(id: string) { return this.data.rules.find(r => r.id === id); }
   addRule(r: DeadlineRule) { this.data.rules.push(r); this.save(); }
+  updateRule(id: string, updates: Partial<DeadlineRule>) {
+    const idx = this.data.rules.findIndex(r => r.id === id);
+    if (idx !== -1) {
+      this.data.rules[idx] = { ...this.data.rules[idx], ...updates };
+      this.save();
+    }
+  }
+  deleteRule(id: string) {
+    this.data.rules = this.data.rules.filter(r => r.id !== id);
+    this.save();
+  }
+
+  // HOLIDAYS
+  getHolidays() { return this.data.holidays; }
+  getHoliday(id: string) { return this.data.holidays.find(h => h.id === id); }
+  addHoliday(h: Holiday) { this.data.holidays.push(h); this.save(); }
+  updateHoliday(id: string, updates: Partial<Holiday>) {
+    const idx = this.data.holidays.findIndex(h => h.id === id);
+    if (idx !== -1) {
+      this.data.holidays[idx] = { ...this.data.holidays[idx], ...updates };
+      this.save();
+    }
+  }
+  deleteHoliday(id: string) {
+    this.data.holidays = this.data.holidays.filter(h => h.id !== id);
+    this.save();
+  }
 
   // DOCUMENTS
   getDocuments(caseId: string) { return this.data.documents.filter(d => d.caseId === caseId); }
+  getDocument(id: string) { return this.data.documents.find(d => d.id === id); }
   addDocument(d: Document) { this.data.documents.push(d); this.save(); }
   updateDocument(id: string, updates: Partial<Document>) {
     const idx = this.data.documents.findIndex(d => d.id === id);
@@ -113,9 +154,17 @@ class LocalDatabase {
       this.save();
     }
   }
+  deleteDocument(id: string) {
+    this.data.documents = this.data.documents.filter(d => d.id !== id);
+    this.save();
+  }
 
   // SETTINGS
   getSettings() { return this.data.settings; }
+  updateSettings(updates: Partial<AppSettings>) {
+    this.data.settings = { ...this.data.settings, ...updates };
+    this.save();
+  }
   
   // BACKUP
   exportData() { return JSON.stringify(this.data); }
